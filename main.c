@@ -26,7 +26,7 @@ struct type3 {
 struct type4 {
     char region[all_string_maxsize];
     char district[all_string_maxsize];
-    char village[all_string_maxsize];
+    char village_name[all_string_maxsize];
     char home_num[all_string_maxsize];
 };
 
@@ -41,36 +41,62 @@ struct info {
     } st_union;
 };
 
-void init_database(struct info *student)
+int init_database(struct info *student)
 {
-    student[0] = (struct info) {
-    .student_surname = "Alehin",.abode_type = 1};
-    student[0].st_union.minsk = (struct type1) {
-    .street = "Kalinowski street",.home_num = "12",.flat_num = "45"};
+    int student_num_typed = 5;
+    strncpy(student[0].student_surname, "Alehin", all_string_maxsize);
+    student[0].abode_type = 1;
+    strncpy(student[0].st_union.minsk.street, "Kalinowski street",
+            all_string_maxsize);
+    strncpy(student[0].st_union.minsk.home_num, "12", all_string_maxsize);
+    strncpy(student[0].st_union.minsk.flat_num, "33", all_string_maxsize);
 
-    student[1] = (struct info) {
-    .student_surname = "Kyngyrov",.abode_type = 2};
-    student[1].st_union.reg_city = (struct type2) {
-    .region = "Grodno region",.city = "Grodno",.street =
-            "Kalinowski street",.home_num = "12",.flat_num = "45"};
+    strncpy(student[1].student_surname, "Sazanov", all_string_maxsize);
+    student[0].abode_type = 2;
+    strncpy(student[1].st_union.reg_city.region, "Grodno region",
+            all_string_maxsize);
+    strncpy(student[1].st_union.reg_city.city, "Grodno",
+            all_string_maxsize);
+    strncpy(student[1].st_union.reg_city.street, "West street",
+            all_string_maxsize);
+    strncpy(student[1].st_union.reg_city.home_num, "85",
+            all_string_maxsize);
+    strncpy(student[1].st_union.reg_city.flat_num, "12",
+            all_string_maxsize);
 
-    student[2] = (struct info) {
-    .student_surname = "Sidorov",.abode_type = 3};
-    student[2].st_union.dist_city = (struct type3) {
-    .region = "Grodno region",.district = "Smorgon district",.city =
-            "Grodno",.street = "Kalinowski street",.home_num =
-            "12",.flat_num = "45"};
+    strncpy(student[2].student_surname, "Sidorov", all_string_maxsize);
+    student[0].abode_type = 3;
+    strncpy(student[2].st_union.dist_city.region, "Grodno region",
+            all_string_maxsize);
+    strncpy(student[2].st_union.dist_city.district, "Smorgon district",
+            all_string_maxsize);
+    strncpy(student[2].st_union.dist_city.city, "Smorgon",
+            all_string_maxsize);
+    strncpy(student[2].st_union.dist_city.street, "South street",
+            all_string_maxsize);
+    strncpy(student[2].st_union.dist_city.home_num, "72",
+            all_string_maxsize);
+    strncpy(student[2].st_union.dist_city.flat_num, "28",
+            all_string_maxsize);
 
-    student[3] = (struct info) {
-    .student_surname = "Ivanov",.abode_type = 4};
-    student[3].st_union.village = (struct type4) {
-    .region = "Grodno region",.district = "Smorgon district",.village =
-            "Krevo",.home_num = "65"};
+    strncpy(student[3].student_surname, "Ivanov", all_string_maxsize);
+    student[0].abode_type = 4;
+    strncpy(student[3].st_union.village.region, "Grodno region",
+            all_string_maxsize);
+    strncpy(student[3].st_union.village.district, "Smorgon district",
+            all_string_maxsize);
+    strncpy(student[3].st_union.village.village_name, "Krevo",
+            all_string_maxsize);
+    strncpy(student[3].st_union.village.home_num, "24",
+            all_string_maxsize);
 
-    student[4] = (struct info) {
-    .student_surname = "Petrov",.abode_type = 1};
-    student[4].st_union.minsk = (struct type1) {
-    .street = "Kalinowski street",.home_num = "12",.flat_num = "45"};
+    strncpy(student[4].student_surname, "Petrov", all_string_maxsize);
+    student[0].abode_type = 1;
+    strncpy(student[4].st_union.minsk.street, "Gikalo street",
+            all_string_maxsize);
+    strncpy(student[4].st_union.minsk.home_num, "4", all_string_maxsize);
+    strncpy(student[4].st_union.minsk.flat_num, "6", all_string_maxsize);
+    return student_num_typed;
 }
 
 int main()
