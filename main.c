@@ -41,59 +41,65 @@ struct info {
     } st_union;
 };
 
+void print_student(struct info *student, int i)
+{
+    switch (student[i].abode_type) {
+    case 1:
+        printf
+            ("%d: %s, from Minsk, address: %s, %s - %s\n",
+             i, student[i].student_surname,
+             student[i].st_union.minsk.street,
+             student[i].st_union.minsk.home_num,
+             student[i].st_union.minsk.flat_num);
+        break;
+
+    case 2:
+        printf
+            ("%d: %s, from %s, %s. address: %s, %s - %s\n",
+             i, student[i].student_surname,
+             student[i].st_union.reg_city.region,
+             student[i].st_union.reg_city.city,
+             student[i].st_union.reg_city.street,
+             student[i].st_union.reg_city.home_num,
+             student[i].st_union.reg_city.flat_num);
+        break;
+
+    case 3:
+        printf
+            ("%d: %s, from %s, %s, %s. address: %s, %s - %s\n",
+             i, student[i].student_surname,
+             student[i].st_union.dist_city.region,
+             student[i].st_union.dist_city.district,
+             student[i].st_union.dist_city.city,
+             student[i].st_union.dist_city.street,
+             student[i].st_union.dist_city.home_num,
+             student[i].st_union.dist_city.flat_num);
+        break;
+
+    case 4:
+        printf
+            ("%d: %s, from %s, %s, %s. home number - %s\n",
+             i, student[i].student_surname,
+             student[i].st_union.village.region,
+             student[i].st_union.village.district,
+             student[i].st_union.village.village_name,
+             student[i].st_union.village.home_num);
+        break;
+
+    default:
+        puts("Incompatible type of student's abode.");
+        break;
+    }
+}
+
 void print_stud_with_type(struct info *student, int student_num_typed,
                           int type)
 {
     int i;
-    printf("Students with type:%d\n", type);
+    printf("Students with type: %d\n", type);
     for (i = 0; i < student_num_typed; i++)
         if (student[i].abode_type == type)
-            switch (student[i].abode_type) {
-            case 1:
-                printf
-                    ("%d: %s, from Minsk, address: %s, %s - %s\n",
-                     i, student[i].student_surname,
-                     student[i].st_union.minsk.street,
-                     student[i].st_union.minsk.home_num,
-                     student[i].st_union.minsk.flat_num);
-                break;
-
-            case 2:
-                printf
-                    ("%d: %s, from %s, %s. address: %s, %s - %s\n",
-                     i, student[i].student_surname,
-                     student[i].st_union.reg_city.region,
-                     student[i].st_union.reg_city.city,
-                     student[i].st_union.reg_city.street,
-                     student[i].st_union.reg_city.home_num,
-                     student[i].st_union.reg_city.flat_num);
-                break;
-
-            case 3:
-                printf
-                    ("%d: %s, from %s, %s, %s. address: %s, %s - %s\n",
-                     i, student[i].student_surname,
-                     student[i].st_union.dist_city.region,
-                     student[i].st_union.dist_city.district,
-                     student[i].st_union.dist_city.city,
-                     student[i].st_union.dist_city.street,
-                     student[i].st_union.dist_city.home_num,
-                     student[i].st_union.dist_city.flat_num);
-                break;
-
-            case 4:
-                printf
-                    ("%d: %s, from %s, %s, %s. home number - %s\n",
-                     i, student[i].student_surname,
-                     student[i].st_union.village.region,
-                     student[i].st_union.village.district,
-                     student[i].st_union.village.village_name,
-                     student[i].st_union.village.home_num);
-                break;
-
-            default:
-                break;
-            }
+            print_student(student, i);
 }
 
 void print_database(struct info *student, int student_num_typed)
@@ -101,52 +107,7 @@ void print_database(struct info *student, int student_num_typed)
     int i;
     puts("Database:");
     for (i = 0; i < student_num_typed; i++)
-        switch (student[i].abode_type) {
-        case 1:
-            printf
-                ("%d: %s, from Minsk, address: %s, %s - %s\n",
-                 i, student[i].student_surname,
-                 student[i].st_union.minsk.street,
-                 student[i].st_union.minsk.home_num,
-                 student[i].st_union.minsk.flat_num);
-            break;
-
-        case 2:
-            printf
-                ("%d: %s, from %s, %s. address: %s, %s - %s\n",
-                 i, student[i].student_surname,
-                 student[i].st_union.reg_city.region,
-                 student[i].st_union.reg_city.city,
-                 student[i].st_union.reg_city.street,
-                 student[i].st_union.reg_city.home_num,
-                 student[i].st_union.reg_city.flat_num);
-            break;
-
-        case 3:
-            printf
-                ("%d: %s, from %s, %s, %s. address: %s, %s - %s\n",
-                 i, student[i].student_surname,
-                 student[i].st_union.dist_city.region,
-                 student[i].st_union.dist_city.district,
-                 student[i].st_union.dist_city.city,
-                 student[i].st_union.dist_city.street,
-                 student[i].st_union.dist_city.home_num,
-                 student[i].st_union.dist_city.flat_num);
-            break;
-
-        case 4:
-            printf
-                ("%d: %s, from %s, %s, %s. home number - %s\n",
-                 i, student[i].student_surname,
-                 student[i].st_union.village.region,
-                 student[i].st_union.village.district,
-                 student[i].st_union.village.village_name,
-                 student[i].st_union.village.home_num);
-            break;
-
-        default:
-            break;
-        }
+        print_student(student, i);
 }
 
 int init_database(struct info *student)
