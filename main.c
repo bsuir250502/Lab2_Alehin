@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <malloc.h>
 #include <string.h>
+#include <getopt.h>
 #define all_string_maxsize 30
 #define student_num 5
 struct type1 {
@@ -87,7 +89,7 @@ void print_student(struct info *student, int i)
         break;
 
     default:
-        puts("Incompatible type of student's abode.");
+        puts("### Incompatible type of student's abode.");
         break;
     }
 }
@@ -96,7 +98,7 @@ void print_stud_with_type(struct info *student, int student_num_typed,
                           int type)
 {
     int i;
-    printf("Students with type: %d\n", type);
+    printf("# Students with adobe type %d:\n", type);
     for (i = 0; i < student_num_typed; i++)
         if (student[i].abode_type == type)
             print_student(student, i);
@@ -105,7 +107,7 @@ void print_stud_with_type(struct info *student, int student_num_typed,
 void print_database(struct info *student, int student_num_typed)
 {
     int i;
-    puts("Database:");
+    puts("# Database:");
     for (i = 0; i < student_num_typed; i++)
         print_student(student, i);
 }
@@ -168,12 +170,47 @@ int init_database(struct info *student)
     return student_num_typed;
 }
 
-int main()
+void readme(void)
 {
-    int student_num_typed;
+    puts("Usage: ./main [mode]");
+    puts("  -p                print all students from database");
+    puts("  -t <type>         print list of students with");
+    puts("                    entered abode type");
+    puts("  -h                help");
+}
+
+int main(int argc, char *argv[])
+{
+    const char *options = "pt:h";
+    int opt = 0, student_num_typed, entered_type;
     struct info student[student_num];
     student_num_typed = init_database(student);
-    print_database(student, student_num_typed);
-    print_stud_with_type(student, student_num_typed, 2);
+    opt = getopt(argc, argv, options);
+    if (opt == -1)
+        readme();
+    while (opt != -1) {
+        switch (opt) {
+        case 'p':
+            print_database(student, student_num_typed);
+            break;
+
+        case 't':
+            entered_type = atoi(optarg);
+            if (entered_type >= 1 && entered_type <= 4)
+                print_stud_with_type(student, student_num_typed,
+                                     entered_type);
+            else
+                puts("Incompatible type. Please enter right type (1-4).");
+            break;
+
+        case 'h':
+            readme();
+            break;
+
+        default:
+            break;
+        }
+        opt = getopt(argc, argv, options);
+    }
     return 0;
 }
