@@ -184,27 +184,34 @@ int main(int argc, char *argv[])
     const char *options = "pt:h";
     int opt = 0, student_num_typed, entered_type;
     struct info student[student_num];
-    student_num_typed = init_database(student);
+    int (*func_pointer1) (struct info *);
+    void (*func_pointer2) (struct info *, int);
+    void (*func_pointer3) (struct info *, int, int);
+    void (*func_pointer4) (void);
+    func_pointer1 = init_database;
+    func_pointer2 = print_database;
+    func_pointer3 = print_stud_with_type;
+    func_pointer4 = readme;
+    student_num_typed = func_pointer1(student);
     opt = getopt(argc, argv, options);
     if (opt == -1)
         readme();
     while (opt != -1) {
         switch (opt) {
         case 'p':
-            print_database(student, student_num_typed);
+            func_pointer2(student, student_num_typed);
             break;
 
         case 't':
             entered_type = atoi(optarg);
             if (entered_type >= 1 && entered_type <= 4)
-                print_stud_with_type(student, student_num_typed,
-                                     entered_type);
+                func_pointer3(student, student_num_typed, entered_type);
             else
                 puts("Incompatible type. Please enter right type (1-4).");
             break;
 
         case 'h':
-            readme();
+            func_pointer4;
             break;
 
         default:
