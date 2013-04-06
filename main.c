@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
 #include <string.h>
 #include <getopt.h>
 #define all_string_maxsize 30
@@ -43,55 +42,58 @@ struct info {
     } st_union;
 };
 
-void print_student(struct info *student, int i)
+void print_student_type1(struct info *student)
 {
-    switch (student[i].abode_type) {
-    case 1:
-        printf
-            ("%d: %s, from Minsk, address: %s, %s - %s\n",
-             i, student[i].student_surname,
-             student[i].st_union.minsk.street,
-             student[i].st_union.minsk.home_num,
-             student[i].st_union.minsk.flat_num);
-        break;
+    printf
+        ("%s, from Minsk, address: %s, %s - %s\n",
+         student->student_surname,
+         student->st_union.minsk.street,
+         student->st_union.minsk.home_num,
+         student->st_union.minsk.flat_num);
+}
 
-    case 2:
-        printf
-            ("%d: %s, from %s, %s. address: %s, %s - %s\n",
-             i, student[i].student_surname,
-             student[i].st_union.reg_city.region,
-             student[i].st_union.reg_city.city,
-             student[i].st_union.reg_city.street,
-             student[i].st_union.reg_city.home_num,
-             student[i].st_union.reg_city.flat_num);
-        break;
+void print_student_type2(struct info *student)
+{
+    printf
+        ("%s, from %s, %s. address: %s, %s - %s\n",
+         student->student_surname,
+         student->st_union.reg_city.region,
+         student->st_union.reg_city.city,
+         student->st_union.reg_city.street,
+         student->st_union.reg_city.home_num,
+         student->st_union.reg_city.flat_num);
+}
 
-    case 3:
-        printf
-            ("%d: %s, from %s, %s, %s. address: %s, %s - %s\n",
-             i, student[i].student_surname,
-             student[i].st_union.dist_city.region,
-             student[i].st_union.dist_city.district,
-             student[i].st_union.dist_city.city,
-             student[i].st_union.dist_city.street,
-             student[i].st_union.dist_city.home_num,
-             student[i].st_union.dist_city.flat_num);
-        break;
+void print_student_type3(struct info *student)
+{
+    printf
+        ("%s, from %s, %s, %s. address: %s, %s - %s\n",
+         student->student_surname,
+         student->st_union.dist_city.region,
+         student->st_union.dist_city.district,
+         student->st_union.dist_city.city,
+         student->st_union.dist_city.street,
+         student->st_union.dist_city.home_num,
+         student->st_union.dist_city.flat_num);
+}
 
-    case 4:
-        printf
-            ("%d: %s, from %s, %s, %s. home number - %s\n",
-             i, student[i].student_surname,
-             student[i].st_union.village.region,
-             student[i].st_union.village.district,
-             student[i].st_union.village.village_name,
-             student[i].st_union.village.home_num);
-        break;
+void print_student_type4(struct info *student)
+{
+    printf
+        ("%s, from %s, %s, %s. home number - %s\n",
+         student->student_surname,
+         student->st_union.village.region,
+         student->st_union.village.district,
+         student->st_union.village.village_name,
+         student->st_union.village.home_num);
+}
 
-    default:
-        puts("### Incompatible type of student's abode.");
-        break;
-    }
+void init_pointers_and_call(struct info *student)
+{
+    void (*p_arr[4]) (struct info *) = {
+    print_student_type1, print_student_type2, print_student_type2,
+            print_student_type4};
+    p_arr[student->abode_type - 1] (student);
 }
 
 void print_stud_with_type(struct info *student, int student_num_typed,
@@ -100,16 +102,21 @@ void print_stud_with_type(struct info *student, int student_num_typed,
     int i;
     printf("# Students with adobe type %d:\n", type);
     for (i = 0; i < student_num_typed; i++)
-        if (student[i].abode_type == type)
-            print_student(student, i);
+        if (student[i].abode_type == type) {
+            printf("%d: ", i);
+            init_pointers_and_call(&student[i]);
+        }
+
 }
 
 void print_database(struct info *student, int student_num_typed)
 {
     int i;
     puts("# Database:");
-    for (i = 0; i < student_num_typed; i++)
-        print_student(student, i);
+    for (i = 0; i < student_num_typed; i++) {
+        printf("%d: ", i);
+        init_pointers_and_call(&student[i]);
+    }
 }
 
 int init_database(struct info *student)
@@ -172,7 +179,7 @@ int init_database(struct info *student)
 
 void readme(void)
 {
-    puts("Usage: ./main [mode]");
+    puts("Usage: ./main [options]");
     puts("  -p                print all students from database");
     puts("  -t <type>         print list of students with");
     puts("                    entered abode type");
@@ -184,34 +191,27 @@ int main(int argc, char *argv[])
     const char *options = "pt:h";
     int opt = 0, student_num_typed, entered_type;
     struct info student[student_num];
-    int (*func_pointer1) (struct info *);
-    void (*func_pointer2) (struct info *, int);
-    void (*func_pointer3) (struct info *, int, int);
-    void (*func_pointer4) (void);
-    func_pointer1 = init_database;
-    func_pointer2 = print_database;
-    func_pointer3 = print_stud_with_type;
-    func_pointer4 = readme;
-    student_num_typed = func_pointer1(student);
+    student_num_typed = init_database(student);
     opt = getopt(argc, argv, options);
     if (opt == -1)
         readme();
     while (opt != -1) {
         switch (opt) {
         case 'p':
-            func_pointer2(student, student_num_typed);
+            print_database(student, student_num_typed);
             break;
 
         case 't':
             entered_type = atoi(optarg);
             if (entered_type >= 1 && entered_type <= 4)
-                func_pointer3(student, student_num_typed, entered_type);
+                print_stud_with_type(student, student_num_typed,
+                                     entered_type);
             else
                 puts("Incompatible type. Please enter right type (1-4).");
             break;
 
         case 'h':
-            func_pointer4;
+            readme();
             break;
 
         default:
